@@ -1,0 +1,127 @@
+{
+  "project_info": {
+    "project_number": "751388705409",
+    "firebase_url": "https://myfirebasechat-9b6a4-default-rtdb.firebaseio.com",
+    "project_id": "myfirebasechat-9b6a4",
+    "storage_bucket": "myfirebasechat-9b6a4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:751388705409:android:da8fefa1c4d40e6cd10380",
+        "android_client_info": {
+          "package_name": "com.drsync.chatting_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "751388705409-vnvj7rr6nvulkm9m9al141udt5ou129k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB9htlpGs_kCZz0DqpN4-hK_2VuHPlqmSc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "751388705409-vnvj7rr6nvulkm9m9al141udt5ou129k.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "751388705409-2t8i0g8mt157r284nhhjgpn4junfrl4q.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.drsync.chattingApp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:751388705409:android:929f6319e6a7c878d10380",
+        "android_client_info": {
+          "package_name": "com.drsync.myfirebasechat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "751388705409-9mppck5tb9v644d7nku1cr1s1uu8n9os.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.drsync.myfirebasechat",
+            "certificate_hash": "9473f4ddf8c48085300e2c878ef8d098a41e9d38"
+          }
+        },
+        {
+          "client_id": "751388705409-vnvj7rr6nvulkm9m9al141udt5ou129k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB9htlpGs_kCZz0DqpN4-hK_2VuHPlqmSc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "751388705409-vnvj7rr6nvulkm9m9al141udt5ou129k.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "751388705409-2t8i0g8mt157r284nhhjgpn4junfrl4q.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.drsync.chattingApp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:751388705409:android:bf35604fac19c8b3d10380",
+        "android_client_info": {
+          "package_name": "com.mediatama.marketplace"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "751388705409-vnvj7rr6nvulkm9m9al141udt5ou129k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB9htlpGs_kCZz0DqpN4-hK_2VuHPlqmSc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "751388705409-vnvj7rr6nvulkm9m9al141udt5ou129k.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "751388705409-2t8i0g8mt157r284nhhjgpn4junfrl4q.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.drsync.chattingApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
