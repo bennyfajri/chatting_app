@@ -34,19 +34,13 @@ class _RegisterPageState extends State<RegisterPage> {
               tag: 'Chatting App',
               child: Text(
                 'Chatting App',
-                style: Theme
-                    .of(context)
-                    .textTheme
-                    .headlineSmall,
+                style: Theme.of(context).textTheme.headlineSmall,
               ),
             ),
             const SizedBox(height: 24.0),
             Text(
               'Create your account',
-              style: Theme
-                  .of(context)
-                  .textTheme
-                  .titleMedium,
+              style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: 8.0),
             TextField(
@@ -67,9 +61,11 @@ class _RegisterPageState extends State<RegisterPage> {
                   icon: Icon(
                       _obscureText ? Icons.visibility : Icons.visibility_off),
                   onPressed: () {
-                    setState(() {
-                      _obscureText = !_obscureText;
-                    });
+                    if (mounted) {
+                      setState(() {
+                        _obscureText = !_obscureText;
+                      });
+                    }
                   },
                 ),
                 hintText: 'Password',
@@ -77,33 +73,35 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
             const SizedBox(height: 24.0),
             MaterialButton(
-              color: Theme
-                  .of(context)
-                  .primaryColor,
+              color: Theme.of(context).primaryColor,
               textTheme: ButtonTextTheme.primary,
               height: 40,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
               ),
               onPressed: () async {
-                setState(() {
-                  _isLoading = true;
-                });
-                try {
-                  final navigator = Navigator.of(context);
-                  final email = _emailController.text;
-                  final password = _passwordController.text;
-
-                  await _auth.createUserWithEmailAndPassword(
-                      email: email, password: password);
-                  navigator.pop();
-                } catch (e) {
-                  final snackBar = SnackBar(content: Text(e.toString()));
-                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                } finally {
+                if (mounted) {
                   setState(() {
-                    _isLoading = false;
+                    _isLoading = true;
                   });
+                  try {
+                    final navigator = Navigator.of(context);
+                    final email = _emailController.text;
+                    final password = _passwordController.text;
+
+                    await _auth.createUserWithEmailAndPassword(
+                        email: email, password: password);
+                    navigator.pop();
+                  } catch (e) {
+                    final snackBar = SnackBar(content: Text(e.toString()));
+                    if (mounted) ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  } finally {
+                    if (mounted) {
+                      setState(() {
+                        _isLoading = false;
+                      });
+                    }
+                  }
                 }
               },
               child: const Text('Register'),

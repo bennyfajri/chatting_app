@@ -22,6 +22,16 @@ class _LoginPageState extends State<LoginPage> {
   bool _isLoading = false;
 
   @override
+  void initState() {
+    super.initState();
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      if (user != null) {
+        Navigator.pushReplacementNamed(context, ChatPage.id);
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
@@ -37,7 +47,7 @@ class _LoginPageState extends State<LoginPage> {
               tag: 'Chatting App',
               child: Text(
                 'Chatting App',
-                style: Theme.of(context).textTheme.headline5,
+                style: Theme.of(context).textTheme.headlineSmall,
               ),
             ),
             const SizedBox(height: 24.0),
@@ -59,9 +69,11 @@ class _LoginPageState extends State<LoginPage> {
                   icon: Icon(
                       _obscureText ? Icons.visibility : Icons.visibility_off),
                   onPressed: () {
-                    setState(() {
-                      _obscureText = !_obscureText;
-                    });
+                    if(mounted) {
+                      setState(() {
+                        _obscureText = !_obscureText;
+                      });
+                    }
                   },
                 ),
                 hintText: 'Password',
@@ -76,19 +88,21 @@ class _LoginPageState extends State<LoginPage> {
                 borderRadius: BorderRadius.circular(16),
               ),
               onPressed: () async {
-                setState(() {
-                  _isLoading = true;
-                });
-                try{
-                  final navigator = Navigator.of(context);
-                  final email = _emailController.text;
-                  final password = _passwordController.text;
+                if(mounted) {
+                  setState(() {
+                    _isLoading = true;
+                  });
+                  try{
+                    final navigator = Navigator.of(context);
+                    final email = _emailController.text;
+                    final password = _passwordController.text;
 
-                  await _auth.signInWithEmailAndPassword(email: email, password: password);
-                  if(mounted) navigator.pushReplacementNamed(ChatPage.id);
-                } catch(e) {
-                  final snackBar = SnackBar(content: Text(e.toString()));
-                  if(mounted)  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    await _auth.signInWithEmailAndPassword(email: email, password: password);
+                    if(mounted) navigator.pushReplacementNamed(ChatPage.id);
+                  } catch(e) {
+                    final snackBar = SnackBar(content: Text(e.toString()));
+                    if(mounted)  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  }
                 }
               },
               child: const Text('Login'),
