@@ -1,4 +1,5 @@
 import 'package:chatting_app/pages/register_page.dart';
+import 'package:chatting_app/utils/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -106,6 +107,29 @@ class _LoginPageState extends State<LoginPage> {
                 }
               },
               child: const Text('Login'),
+            ),
+            SizedBox(height: 16),
+            Expanded(
+              child: ElevatedButton(
+                onPressed: () {
+                  signInWithGoogle();
+                  Navigator.pushReplacementNamed(context, ChatPage.id);
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset('assets/google.png',
+                        fit: BoxFit.contain,
+                        width: 40.0,
+                        height: 40.0),
+                    Text(
+                      'Google',
+                      style: TextStyle(
+                          fontSize: 25.0, color: Colors.black),
+                    ),
+                  ],
+                ),
+              ),
             ),
             TextButton(
               child: const Text('Does not have an account yet? Register here'),
