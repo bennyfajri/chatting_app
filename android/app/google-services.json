@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "751388705409-2pnvuf4dpc2isl2p2vgb14sad636661d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.drsync.chatting_app",
+            "certificate_hash": "0fa8a4648cd745617b6638225d425d99c00d0aee"
+          }
+        },
+        {
           "client_id": "751388705409-vnvj7rr6nvulkm9m9al141udt5ou129k.apps.googleusercontent.com",
           "client_type": 3
         }

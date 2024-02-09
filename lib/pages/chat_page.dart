@@ -2,6 +2,7 @@ import 'package:chatting_app/widgets/message_bubble.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 import 'login_page.dart';
 
@@ -52,6 +53,7 @@ class _ChatPageState extends State<ChatPage> {
             onPressed: () async {
               final navigator = Navigator.of(context);
               await _auth.signOut();
+              await GoogleSignIn().signOut();
 
               navigator.pushReplacementNamed(LoginPage.id);
             },

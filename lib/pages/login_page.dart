@@ -70,7 +70,7 @@ class _LoginPageState extends State<LoginPage> {
                   icon: Icon(
                       _obscureText ? Icons.visibility : Icons.visibility_off),
                   onPressed: () {
-                    if(mounted) {
+                    if (mounted) {
                       setState(() {
                         _obscureText = !_obscureText;
                       });
@@ -89,46 +89,53 @@ class _LoginPageState extends State<LoginPage> {
                 borderRadius: BorderRadius.circular(16),
               ),
               onPressed: () async {
-                if(mounted) {
+                if (mounted) {
                   setState(() {
                     _isLoading = true;
                   });
-                  try{
+                  try {
                     final navigator = Navigator.of(context);
                     final email = _emailController.text;
                     final password = _passwordController.text;
 
-                    await _auth.signInWithEmailAndPassword(email: email, password: password);
-                    if(mounted) navigator.pushReplacementNamed(ChatPage.id);
-                  } catch(e) {
+                    await _auth.signInWithEmailAndPassword(
+                        email: email, password: password);
+                    if (mounted) navigator.pushReplacementNamed(ChatPage.id);
+                  } catch (e) {
                     final snackBar = SnackBar(content: Text(e.toString()));
-                    if(mounted)  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    if (mounted)
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   }
                 }
               },
               child: const Text('Login'),
             ),
-            SizedBox(height: 16),
-            Expanded(
-              child: ElevatedButton(
-                onPressed: () {
-                  signInWithGoogle();
-                  Navigator.pushReplacementNamed(context, ChatPage.id);
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset('assets/google.png',
-                        fit: BoxFit.contain,
-                        width: 40.0,
-                        height: 40.0),
-                    Text(
-                      'Google',
-                      style: TextStyle(
-                          fontSize: 25.0, color: Colors.black),
-                    ),
-                  ],
-                ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () async {
+                try {
+                  var googleSignIn = await signInWithGoogle();
+                  if (googleSignIn.user != null) {
+                    if (mounted) {
+                      Navigator.pushReplacementNamed(context, ChatPage.id);
+                    }
+                  }
+                } catch (e) {
+                  final snackBar = SnackBar(content: Text(e.toString()));
+                  if (mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  }
+                }
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset('assets/google.png',
+                      fit: BoxFit.contain, width: 40.0, height: 40.0),
+                  const Text(
+                    'Google',
+                  ),
+                ],
               ),
             ),
             TextButton(
