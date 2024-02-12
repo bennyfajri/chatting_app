@@ -127,15 +127,19 @@ class _LoginPageState extends State<LoginPage> {
                   }
                 }
               },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset('assets/google.png',
-                      fit: BoxFit.contain, width: 40.0, height: 40.0),
-                  const Text(
-                    'Google',
-                  ),
-                ],
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset('assets/google.png',
+                        fit: BoxFit.contain, width: 40.0, height: 40.0),
+                    const SizedBox(width: 12.0),
+                    const Text(
+                      'Sign in with Google',
+                    ),
+                  ],
+                ),
               ),
             ),
             TextButton(
