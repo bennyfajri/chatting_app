@@ -94,7 +94,9 @@ class _RegisterPageState extends State<RegisterPage> {
                     navigator.pop();
                   } catch (e) {
                     final snackBar = SnackBar(content: Text(e.toString()));
-                    if (mounted) ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    };
                   } finally {
                     if (mounted) {
                       setState(() {

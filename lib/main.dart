@@ -1,8 +1,10 @@
 import 'package:chatting_app/pages/chat_page.dart';
+import 'package:chatting_app/pages/dashboard_page.dart';
 import 'package:chatting_app/pages/login_page.dart';
 import 'package:chatting_app/pages/register_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'firebase_options.dart';
 
@@ -11,7 +13,7 @@ void main() async {
   await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -25,8 +27,9 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      initialRoute: LoginPage.id,
+      initialRoute: DashboardPage.routeName,
       routes: {
+        DashboardPage.routeName: (context) => const DashboardPage(),
         LoginPage.id: (context) => const LoginPage(),
         RegisterPage.id: (context) => const RegisterPage(),
         ChatPage.id: (context) => const ChatPage(),

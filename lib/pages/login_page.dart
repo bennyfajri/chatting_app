@@ -1,39 +1,22 @@
 import 'package:chatting_app/pages/register_page.dart';
-import 'package:chatting_app/utils/google_sign_in.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:chatting_app/utils/auth_provider.dart';
+import 'package:chatting_app/utils/login/login_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'chat_page.dart';
 
-class LoginPage extends StatefulWidget {
+class LoginPage extends HookConsumerWidget {
   static const String id = 'login_page';
 
   const LoginPage({Key? key}) : super(key: key);
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final loginFormController = ref.watch(loginProvider);
+    final isLoading = ref.watch(isLoadingProvider);
+    final obscureText = ref.watch(obscureTextProvider);
 
-class _LoginPageState extends State<LoginPage> {
-  final _auth = FirebaseAuth.instance;
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-
-  bool _obscureText = true;
-  bool _isLoading = false;
-
-  @override
-  void initState() {
-    super.initState();
-    FirebaseAuth.instance.authStateChanges().listen((User? user) {
-      if (user != null) {
-        Navigator.pushReplacementNamed(context, ChatPage.id);
-      }
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -41,7 +24,7 @@ class _LoginPageState extends State<LoginPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            _isLoading
+            isLoading
                 ? const Center(child: CircularProgressIndicator())
                 : Container(),
             Hero(
@@ -52,29 +35,31 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             const SizedBox(height: 24.0),
-            TextField(
-              controller: _emailController,
+            TextFormField(
+              initialValue: loginFormController.email,
               keyboardType: TextInputType.emailAddress,
+              onChanged: (value) {
+                ref.read(loginProvider.notifier).updateEmail(value);
+              },
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 hintText: 'Email',
               ),
             ),
             const SizedBox(height: 8.0),
-            TextField(
-              controller: _passwordController,
-              obscureText: _obscureText,
+            TextFormField(
+              initialValue: loginFormController.password,
+              obscureText: obscureText,
+              onChanged: (value) {
+                ref.read(loginProvider.notifier).updatePassword(value);
+              },
               decoration: InputDecoration(
                 border: const OutlineInputBorder(),
                 suffixIcon: IconButton(
                   icon: Icon(
-                      _obscureText ? Icons.visibility : Icons.visibility_off),
+                      obscureText ? Icons.visibility : Icons.visibility_off),
                   onPressed: () {
-                    if (mounted) {
-                      setState(() {
-                        _obscureText = !_obscureText;
-                      });
-                    }
+                    ref.read(obscureTextProvider.notifier).state = !obscureText;
                   },
                 ),
                 hintText: 'Password',
@@ -89,22 +74,27 @@ class _LoginPageState extends State<LoginPage> {
                 borderRadius: BorderRadius.circular(16),
               ),
               onPressed: () async {
-                if (mounted) {
-                  setState(() {
-                    _isLoading = true;
-                  });
-                  try {
-                    final navigator = Navigator.of(context);
-                    final email = _emailController.text;
-                    final password = _passwordController.text;
+                ref.read(isLoadingProvider.notifier).state = true;
+                try {
+                  final navigator = Navigator.of(context);
+                  final email = loginFormController.email;
+                  final password = loginFormController.password;
 
-                    await _auth.signInWithEmailAndPassword(
-                        email: email, password: password);
-                    if (mounted) navigator.pushReplacementNamed(ChatPage.id);
-                  } catch (e) {
-                    final snackBar = SnackBar(content: Text(e.toString()));
-                    if (mounted)
-                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  var emailSignIn = await ref
+                      .read(userProvider.notifier)
+                      .signInWithEmailAndPassword(
+                        email ?? "",
+                        password ?? "",
+                      );
+                  if (emailSignIn.user != null) {
+                    if (context.mounted) {
+                      navigator.pushReplacementNamed(ChatPage.id);
+                    }
+                  }
+                } catch (e) {
+                  final snackBar = SnackBar(content: Text(e.toString()));
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   }
                 }
               },
@@ -114,15 +104,16 @@ class _LoginPageState extends State<LoginPage> {
             ElevatedButton(
               onPressed: () async {
                 try {
-                  var googleSignIn = await signInWithGoogle();
+                  var googleSignIn =
+                      await ref.read(userProvider.notifier).signInWithGoogle();
                   if (googleSignIn.user != null) {
-                    if (mounted) {
+                    if (context.mounted) {
                       Navigator.pushReplacementNamed(context, ChatPage.id);
                     }
                   }
                 } catch (e) {
                   final snackBar = SnackBar(content: Text(e.toString()));
-                  if (mounted) {
+                  if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   }
                 }
@@ -150,12 +141,5 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
   }
 }
