@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:chatting_app/utils/auth_provider.dart';
 import 'package:chatting_app/utils/chat/chat.dart';
 import 'package:chatting_app/utils/chat/chat_provider.dart';
@@ -40,27 +42,37 @@ class ChatPage extends HookConsumerWidget {
         child: Column(
           children: [
             Expanded(
-              child: chats.when(data: (chatList) => ListView(
-                reverse: true,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 8.0,
-                  vertical: 16.0,
-                ),
-                children: chatList.map((chat) {
-                  final String messageText = chat.text ?? "";
-                  final String messageSender = chat.sender ?? "";
+              child: chats.when(
+                  data: (chatList) =>
+                      ListView.builder(
+                        reverse: true,
+                        shrinkWrap: true,
+                          itemCount: chatList.length,
+                          itemBuilder: (context, index) {
+                        final String messageText = chatList[index].text ?? "";
+                        final String messageSender =
+                            chatList[index].sender ?? "";
+                        final isSameWithBefore = index != chatList.length-1
+                            ? chatList[index].sender ==
+                                chatList[index + 1].sender
+                            : false;
 
-                  return MessageBubble(
-                    sender: messageSender,
-                    text: messageText,
-                    isMyChat: messageSender == auth.currentUser?.displayName,
-                  );
-                }).toList(),
-              ), error: (error, stackTrace) => Center(
-                child: Text("$error $stackTrace"),
-              ), loading: () => const Center(
-    child: CircularProgressIndicator(),
-    )),
+                        log(index.toString());
+
+                        return MessageBubble(
+                          sender: messageSender,
+                          text: messageText,
+                          isMyChat:
+                              messageSender == auth.currentUser?.displayName,
+                          isSameWithBefore: isSameWithBefore,
+                        );
+                      }),
+                  error: (error, stackTrace) => Center(
+                        child: Text("$error $stackTrace"),
+                      ),
+                  loading: () => const Center(
+                        child: CircularProgressIndicator(),
+                      )),
             ),
             const SizedBox(height: 8),
             Row(
