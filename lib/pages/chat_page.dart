@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:chatting_app/utils/auth_provider.dart';
 import 'package:chatting_app/utils/chat/chat.dart';
 import 'package:chatting_app/utils/chat/chat_provider.dart';
@@ -57,8 +55,6 @@ class ChatPage extends HookConsumerWidget {
                                 chatList[index + 1].sender
                             : false;
 
-                        log(index.toString());
-
                         return MessageBubble(
                           sender: messageSender,
                           text: messageText,
@@ -94,6 +90,7 @@ class ChatPage extends HookConsumerWidget {
                   onPressed: () {
                     ref.watch(chatProvider).uploadChat(
                           ChatModel(
+                            senderId: auth.currentUser?.uid,
                             sender: auth.currentUser?.displayName,
                             text: messageController.text,
                           ),

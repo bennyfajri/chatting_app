@@ -28,7 +28,7 @@ class MessageBubble extends StatelessWidget {
 
   final sameAsBeforeBorderRadius = const BorderRadius.all(Radius.circular(16));
 
-  final sameAsBeforePadding = const EdgeInsets.symmetric(horizontal: 8);
+  final sameAsBeforePadding = const EdgeInsets.symmetric(horizontal: 8, vertical:2);
 
   final diffrentThanBeforePadding = const EdgeInsets.symmetric(horizontal: 8 , vertical: 4);
 

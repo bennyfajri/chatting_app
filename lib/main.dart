@@ -2,17 +2,21 @@ import 'package:chatting_app/pages/chat_page.dart';
 import 'package:chatting_app/pages/dashboard_page.dart';
 import 'package:chatting_app/pages/login_page.dart';
 import 'package:chatting_app/pages/register_page.dart';
+import 'package:chatting_app/utils/background_service.dart';
+import 'package:chatting_app/utils/local_notifications.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'firebase_options.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
   );
+  await initializeService();
+  await initializeNotification();
   runApp(const ProviderScope(child: MyApp()));
 }
 
