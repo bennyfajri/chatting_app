@@ -1,6 +1,6 @@
 import 'package:chatting_app/pages/register_page.dart';
+import 'package:chatting_app/provider/login_provider.dart';
 import 'package:chatting_app/utils/auth_provider.dart';
-import 'package:chatting_app/utils/login/login_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 

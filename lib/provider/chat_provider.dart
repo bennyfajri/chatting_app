@@ -1,5 +1,5 @@
+import 'package:chatting_app/models/chat.dart';
 import 'package:chatting_app/utils/auth_provider.dart';
-import 'package:chatting_app/utils/chat/chat.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

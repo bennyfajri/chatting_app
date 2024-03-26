@@ -1,6 +1,8 @@
+import 'package:chatting_app/models/chat.dart';
+import 'package:chatting_app/pages/schedule_page.dart';
+import 'package:chatting_app/provider/chat_provider.dart';
 import 'package:chatting_app/utils/auth_provider.dart';
-import 'package:chatting_app/utils/chat/chat.dart';
-import 'package:chatting_app/utils/chat/chat_provider.dart';
+import 'package:chatting_app/utils/constant.dart';
 import 'package:chatting_app/widgets/message_bubble.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -23,6 +25,13 @@ class ChatPage extends HookConsumerWidget {
       appBar: AppBar(
         title: const Text('Chat Room'),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.alarm),
+            tooltip: 'Alarm',
+            onPressed: () async {
+              Constant.goToPage(context, const SchedulePage());
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.close),
             tooltip: 'Logout',

@@ -1,4 +1,4 @@
-import 'package:chatting_app/utils/login/login_controller.dart';
+import 'package:chatting_app/models/login_controller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final loginProvider =
