@@ -1,6 +1,7 @@
 import 'package:chatting_app/pages/chat_page.dart';
 import 'package:chatting_app/pages/login_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -14,9 +15,13 @@ class DashboardPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
 
-
     final requestPermissionFuture = useMemoized(() => Constant.requestPermissions());
     useFuture(requestPermissionFuture);
+
+    useEffect(() {
+      FlutterBackgroundService().invoke("setAsBackground");
+      return;
+    });
 
     final auth = ref.watch(userProvider);
     final userId = auth.currentUser?.uid;
