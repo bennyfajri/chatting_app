@@ -1,9 +1,10 @@
 import 'dart:io';
+import 'dart:math';
 
+import 'package:chatting_app/service/local_notifications_init.dart';
+import 'package:chatting_app/utils/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-
-import 'local_notifications.dart';
 
 class Constant {
   Constant._();
@@ -88,5 +89,46 @@ class Constant {
         );
       },
     );
+  }
+
+  static String getNotificationTitle(String scheduleType) {
+    List<String> listTitleText;
+    if(scheduleType == Strings.listScheduleType[0].name) {
+      listTitleText = Strings.listEatingTitle;
+    } else if(scheduleType == Strings.listScheduleType[1].name) {
+      listTitleText = Strings.listExcerciseTitle;
+    } else {
+      listTitleText = Strings.listMedicationTitle;
+    }
+    return listTitleText[Random().nextInt(listTitleText.length)];
+  }
+
+  static String getNotificationDesc(String scheduleType) {
+    final scheduleTypeLower = scheduleType.capitalizeByWord();
+    var listText = [
+      "Hey there! Time for a break and a healthy $scheduleTypeLower session.",
+      "Don't forget to take care of yourself! It's $scheduleTypeLower time.",
+      "Listen to your body—it's telling you it's time for $scheduleTypeLower.",
+      "Ready to nourish your body? Let's focus on $scheduleTypeLower now.",
+      "A gentle reminder: prioritize your health with a session of $scheduleTypeLower.",
+      "Feeling sluggish? A quick $scheduleTypeLower break can help boost your energy.",
+      "Your well-being matters. Take a moment for some $scheduleTypeLower!",
+      "Stay on track with your health goals. It's time for $scheduleTypeLower.",
+      "Give yourself the gift of self-care. Let's do some $scheduleTypeLower!",
+      "Time flies when you're having fun—especially during $scheduleTypeLower time!"
+    ];
+    return listText[Random().nextInt(listText.length)];
+  }
+}
+
+extension StringExtension on String {
+  String capitalizeByWord() {
+    if (trim().isEmpty) {
+      return '';
+    }
+    return split(' ')
+        .map((element) =>
+    "${element[0].toUpperCase()}${element.substring(1).toLowerCase()}")
+        .join(" ");
   }
 }

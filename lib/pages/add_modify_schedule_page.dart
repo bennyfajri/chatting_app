@@ -158,6 +158,7 @@ class AddOrModifySchedulePage extends HookConsumerWidget {
                   ref.read(isLoadingUpload.notifier).state = true;
                   final Schedule schedule = Schedule(
                       id: sNotifier.id,
+                      userId: sNotifier.userId,
                       type: sNotifier.type,
                       time: sNotifier.time,
                       isActive: true);

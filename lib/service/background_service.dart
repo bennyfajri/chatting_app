@@ -1,9 +1,13 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 import 'dart:ui';
 
 import 'package:chatting_app/firebase_options.dart';
 import 'package:chatting_app/models/chat.dart';
+import 'package:chatting_app/models/schedule.dart';
+import 'package:chatting_app/service/local_notification_service.dart';
+import 'package:chatting_app/service/local_notifications_init.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -12,6 +16,7 @@ import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_background_service_android/flutter_background_service_android.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:timezone/timezone.dart' as tz;
 
 Future<void> initializeService() async {
   final service = FlutterBackgroundService();
@@ -93,6 +98,8 @@ void onStart(ServiceInstance service) async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await configureLocalTimeZone();
+  List<Schedule>? listSchedule = [];
 
   // For flutter prior to version 3.0.0
   // We have to register the plugin manually
@@ -118,6 +125,7 @@ void onStart(ServiceInstance service) async {
     service.stopSelf();
   });
 
+  /// Message  notification function
   var auth = FirebaseAuth.instance;
   FirebaseFirestore.instance
       .collection("messages")
@@ -143,6 +151,39 @@ void onStart(ServiceInstance service) async {
         await flutterLocalNotificationsPlugin.show(
             id++, result.sender, result.text, notificationDetails,
             payload: 'item x');
+        // showNotificationWithActions(Schedule.empty(), flutterLocalNotificationsPlugin);
+      }
+    }
+  });
+
+  /// Get alarm data from firebase
+  FirebaseFirestore.instance
+      .collection("alarm")
+      .where("userId", isEqualTo: auth.currentUser?.uid)
+      .snapshots()
+      .listen((event) async {
+    if (event.docs.isNotEmpty) {
+      final result =
+      event.docs.map((e) => Schedule.fromMap(e.data(), e.id)).toList();
+      listSchedule = result;
+      cancelAllNotifications();
+    }
+  });
+
+  /// Check periodically time to show alert
+  Timer.periodic(const Duration(seconds: 10), (timer) async {
+    for (var schedule in listSchedule ?? []) {
+      if (schedule.isActive == true) {
+        final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
+        var scheduledTime =
+        nextInstanceOfTime(schedule.time);
+        log("Scheduled time : $scheduledTime \n Now : $now");
+        if (
+            scheduledTime.hour == now.hour &&
+            scheduledTime.minute == now.minute) {
+          service.invoke('update', {"showAlarm": true});
+          showNotificationWithActions(Schedule.empty(), flutterLocalNotificationsPlugin);
+        }
       }
     }
   });

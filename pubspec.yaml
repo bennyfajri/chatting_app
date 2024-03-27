@@ -52,6 +52,7 @@ dependencies:
   shimmer: ^3.0.0
   flutter_time_picker_spinner: ^2.0.0
   iconify_flutter: ^0.0.5
+  flutter_timezone: ^1.0.8
 
 dev_dependencies:
   flutter_test:
