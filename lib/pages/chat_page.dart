@@ -20,6 +20,8 @@ class ChatPage extends HookConsumerWidget {
     final auth = ref.watch(userProvider);
     final chats = ref.watch(chatStream);
     final messageController = useTextEditingController();
+    final editMode = useState(false);
+    final messageId = useState("");
 
     return Scaffold(
       appBar: AppBar(
@@ -33,7 +35,7 @@ class ChatPage extends HookConsumerWidget {
             },
           ),
           IconButton(
-            icon: const Icon(Icons.close),
+            icon: const Icon(Icons.logout),
             tooltip: 'Logout',
             onPressed: () async {
               final navigator = Navigator.of(context);
@@ -41,7 +43,15 @@ class ChatPage extends HookConsumerWidget {
 
               navigator.pushReplacementNamed(LoginPage.id);
             },
-          )
+          ),
+          if(editMode.value) IconButton(
+            icon: const Icon(Icons.close),
+            tooltip: 'Cancel',
+            onPressed: () async {
+             editMode.value = false;
+             messageId.value = "";
+            },
+          ),
         ],
       ),
       body: Padding(
@@ -70,6 +80,11 @@ class ChatPage extends HookConsumerWidget {
                           isMyChat:
                               messageSender == auth.currentUser?.displayName,
                           isSameWithBefore: isSameWithBefore,
+                          onLongPress: (){
+                            messageController.text = messageText;
+                            messageId.value = chatList[index].id ?? "";
+                            editMode.value = true;
+                          },
                         );
                       }),
                   error: (error, stackTrace) => Center(
@@ -96,15 +111,29 @@ class ChatPage extends HookConsumerWidget {
                 MaterialButton(
                   color: Theme.of(context).primaryColor,
                   textTheme: ButtonTextTheme.primary,
-                  onPressed: () {
-                    ref.watch(chatProvider).uploadChat(
-                          ChatModel(
-                            senderId: auth.currentUser?.uid,
-                            sender: auth.currentUser?.displayName,
-                            text: messageController.text,
-                          ),
-                        );
+                  onPressed: () async {
+                     if(editMode.value) {
+                      await ref.watch(chatProvider).updateChat(
+                        ChatModel(
+                          senderId: auth.currentUser?.uid,
+                          sender: auth.currentUser?.displayName,
+                          text: messageController.text,
+                          test: "test111"
+                        ),
+                        messageId.value
+                      );
+                    } else {
+                      await ref.watch(chatProvider).uploadChat(
+                        ChatModel(
+                          senderId: auth.currentUser?.uid,
+                          sender: auth.currentUser?.displayName,
+                          text: messageController.text,
+                        ),
+                      );
+                    }
 
+                    editMode.value = false;
+                    messageId.value = "";
                     messageController.clear();
                   },
                   child: const Text('SEND'),

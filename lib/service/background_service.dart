@@ -135,7 +135,7 @@ void onStart(ServiceInstance service) async {
     if (event.docChanges.isNotEmpty) {
       var id = 0;
       final result = event.docs
-          .map((snapshot) => ChatModel.fromMap(snapshot.data()))
+          .map((snapshot) => ChatModel.fromMap(snapshot.data(), snapshot.id))
           .toList()
           .first;
 

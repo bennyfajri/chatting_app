@@ -19,7 +19,7 @@ class ChatProvider {
         .snapshots();
     return documentSnapshot.map((event) {
       final result = event.docs
-          .map((snapshot) => ChatModel.fromMap(snapshot.data()))
+          .map((snapshot) => ChatModel.fromMap(snapshot.data(), snapshot.id))
           .toList();
       return result;
     });
@@ -28,6 +28,14 @@ class ChatProvider {
   Future<void> uploadChat(ChatModel chat) async {
     try {
       await firestore.collection("messages").add(chat.toMap());
+    } catch (e) {
+      throw "Something went wrong, Please try again";
+    }
+  }
+
+  Future<void> updateChat(ChatModel chat, String docId) async {
+    try {
+      await firestore.collection("messages").doc(docId).update(chat.toMap());
     } catch (e) {
       throw "Something went wrong, Please try again";
     }
