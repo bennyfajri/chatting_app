@@ -47,7 +47,7 @@ class MessageBubble extends StatelessWidget {
           crossAxisAlignment:
               isMyChat ? CrossAxisAlignment.end : CrossAxisAlignment.start,
           children: <Widget>[
-            if (!isSameWithBefore)
+            if (!isSameWithBefore && !isMyChat)
               Text(
                 sender,
                 style: const TextStyle(
