@@ -5,7 +5,6 @@ class ChatModel {
   String? senderId;
   String? sender;
   String? text;
-  String? test;
   Timestamp? dateCreated;
 
   ChatModel({
@@ -13,7 +12,6 @@ class ChatModel {
     this.senderId,
     this.sender,
     this.text,
-    this.test,
     this.dateCreated,
   });
 
@@ -35,7 +33,6 @@ class ChatModel {
         senderId: "",
         sender: "",
         text: "",
-        test: "",
         dateCreated: Timestamp.now(),
       );
 
@@ -43,7 +40,6 @@ class ChatModel {
     final String? senderId = data['senderId'];
     final String? sender = data['sender'];
     final String? text = data['text'];
-    final String? test = data['test'];
     final Timestamp? dateCreated = data['dateCreated'];
 
     return ChatModel(
@@ -51,7 +47,6 @@ class ChatModel {
         senderId: senderId,
         sender: sender,
         text: text,
-        test: test,
         dateCreated: dateCreated);
   }
 
@@ -60,8 +55,7 @@ class ChatModel {
       "text": text,
       "sender": sender,
       "senderId": senderId,
-      "dateCreated": Timestamp.now(),
-      "test": test
+      "dateCreated": dateCreated ?? Timestamp.now(),
     };
   }
 }
